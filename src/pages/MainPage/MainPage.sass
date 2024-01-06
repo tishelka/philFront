@@ -1,9 +1,10 @@
 .main-container
     display: flex
     flex-direction: column
-    gap: 60px
+    // gap: 60px
 
     .main-items
+        margin-top: 60px
         display: flex
         flex-direction: column
         align-items: center
@@ -15,12 +16,34 @@
             gap: 40px
 
             .main-filter-button
-                background-color: white
-                height: 40px
-                width: 120px
+                margin-right: 5px
+                width: 222px
+                height: 52px
+                border: 2px solid #D0D0D0
+                line-height: 45px
+                text-align: center
+                font-size: 18px
+                font-style: normal
+                font-weight: 400
+                color: #6B6B6B
+                text-transform: uppercase
+                transform: skewX(-25deg)
                 cursor: pointer
+                transition: 0.5s all
+                &:last-child
+                    margin-right: 0
+                div
+                    transform: skewX(25deg)
+                &__activ
+                    background: #C70101
+                    color: #fff
+                    border: none
+                &:hover
+                    box-shadow: 3px 4px 10px black 
+                    border: none
 
         .main-item-selection
             display: flex
             flex-wrap: wrap
+            justify-content: space-between
             gap: 30px
