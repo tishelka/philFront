@@ -7,7 +7,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['email', 'first_name', 'last_name', 'phone_number', 'address', 'password', 'password2']
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone_number', 'address', 'password', 'password2']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -26,7 +26,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['email', 'password',]
+        fields = ['id', 'email', 'password',]
 
 
 class LogoutSerializer(serializers.ModelSerializer):
@@ -72,12 +72,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ShowProductSerializer(serializers.ModelSerializer):
-    producer = ProducerSerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
-
     class Meta:
         model = Product
-        fields = ['id', 'name', 'producer', 'category']
+        fields = "__all__"
 
 
 class OrderSerializer(serializers.ModelSerializer):

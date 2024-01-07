@@ -10,7 +10,7 @@ from rest_framework import generics
 from .utils import get_tokens_for_user
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
@@ -37,8 +37,10 @@ class LoginView(generics.GenericAPIView):
             if user is not None:
                 login(request, user)
                 auth_data = get_tokens_for_user(request.user)
-                return Response({'msg': 'Login Success', **auth_data}, status=status.HTTP_200_OK)
+                user_data = {'user_id': user.id, **auth_data}
+                return Response({'msg': 'Login Success', **user_data}, status=status.HTTP_200_OK)
             return Response({'msg': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 class LogoutView(APIView):
@@ -98,15 +100,12 @@ class ProductViewSet(ModelViewSet):
             return serializers.ProductSerializer
 
     def get_permissions(self):
-        if self.action in SAFE_METHODS:
-            return [IsAuthenticated()]
-        else:
-            return [IsAdminUser()]
+        return [AllowAny()]
 
 
 class OrderViewSet(CreateModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
     queryset = Order.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_serializer_class(self):
         if self.action in SAFE_METHODS:

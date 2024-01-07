@@ -11,8 +11,7 @@ import axios from "axios";
 
 type ShopItemData = {
   id: number;
-  title: string;
-  itemImg: string;
+  name: string;
   description: string;
   price: number;
   filter: string;
@@ -21,22 +20,24 @@ type ShopItemData = {
 export const MainPage = () => {
   const [shopItems, setShopItems] = useState<ShopItemData[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
-
+  const userId = localStorage.getItem("userId") || "";
   const [isOpen, setIsOpen] = useState(false);
+
   const closeModal = () => {
     setIsOpen(false);
   };
 
   useEffect(() => {
+    console.log(userId);
     axios
-      .get("http://localhost:3000/items")
+      .get("http://127.0.0.1:8000/system/product/")
       .then((response) => {
         setShopItems(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [userId]);
 
   const handleFilterClick = (filter: string) => {
     setSelectedFilter(filter);
@@ -77,14 +78,9 @@ export const MainPage = () => {
         <div className="cont cont-cat">
           <div className="main-item-selection">
             {filteredShopItems.map((shopItem: ShopItemData) => {
-              const props = {
-                id: shopItem.id,
-                title: shopItem.title,
-                itemImg: shopItem.itemImg,
-                description: shopItem.description,
-                price: shopItem.price,
-              };
-              return <ShopItem {...props} />;
+              return (
+                <ShopItem key={shopItem.id} {...shopItem} userId={userId} />
+              );
             })}
           </div>
         </div>

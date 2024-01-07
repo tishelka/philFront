@@ -85,9 +85,8 @@ class Producer(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=500)
-    producer = models.ForeignKey('system.Producer', related_name='produced', on_delete=models.CASCADE)
-    category = models.ForeignKey('system.Category', related_name='in_category', on_delete=models.CASCADE)
-
+    description = models.CharField(max_length=500, default='No description provided')
+    price = models.IntegerField(default=0)
 
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, related_name='my_orders', on_delete=models.CASCADE)

@@ -14,44 +14,58 @@ export const SignUpPage = () => {
   const [isLogin, setLogin] = useState<boolean>(false);
   const nav = useNavigate();
 
-  const handleSignIn = () => {
-    axios
-      .post("http://127.0.0.1:8000/system/register/", {
-        email: email,
-        first_name: firstName,
-        last_name: lastName,
-        phone_number: phoneNumber,
-        address: address,
-        password: password,
-        password2: password2,
-      })
-      .then((response) => {
+  const handleSignIn = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/system/register/",
+        {
+          email,
+          first_name: firstName,
+          last_name: lastName,
+          phone_number: phoneNumber,
+          address,
+          password,
+          password2,
+        }
+      );
+
+      if (response.status === 201) {
+        const userId = response.data.id;
+        localStorage.setItem("userId", userId);
         localStorage.setItem("authToken", response.data.auth_token);
         localStorage.setItem("email", email);
         alert("Registration successful!");
         nav("main");
-      })
-      .catch((error) => {
-        console.error("Registration error:", error);
-      });
+      } else {
+        alert("Registration failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      alert("An error occurred during registration. Please try again.");
+    }
   };
 
-  const handleLogIn = () => {
-    axios
-      .post("http://127.0.0.1:8000/system/login/", {
-        email: email,
-        password: password,
-      })
-      .then((response) => {
-        console.log("Response data:", response.data);
+  const handleLogIn = async () => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/system/login/", {
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        const userId = response.data.user_id;
+        localStorage.setItem("userId", userId);
         localStorage.setItem("authToken", response.data.auth_token);
         localStorage.setItem("email", email);
         alert("Login successful!");
         nav("main");
-      })
-      .catch((error) => {
-        console.error("Login error:", error);
-      });
+      } else {
+        alert("Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("An error occurred during login. Please try again.");
+    }
   };
 
   return (
